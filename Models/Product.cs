@@ -27,5 +27,11 @@ namespace api.Models
 
         [Column("price")]
         public required decimal Price { get; set; }
+
+        [Column("category")]
+        public required string Category { get; set; }
+
+        [Column("subcategory")]
+        public required string Subcategory { get; set; }
     }
 }
