@@ -7,6 +7,20 @@ Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
+//CORS para proteccion.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy", policy =>
+    {
+        policy.WithOrigins(
+            "http://localhost:4321",
+            "https://offcolors.github.io"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 // Configure database connection string.
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
