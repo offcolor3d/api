@@ -40,6 +40,14 @@ namespace api.Controllers
             //Ejecuta la consulta con los filtros aplicados y devuelve los resultados
             var filteredProducts = await queryParams.ToListAsync();
 
+            if(!filteredProducts.Any())
+            {
+                Console.WriteLine("No se encontraron productos que coincidan " + 
+                "con los filtros proporcionados. \nCategoria: " + category + "\nSubcategoria: " + subcategory);
+                Console.WriteLine("Mandando todos los productos sin filtrar...");
+                filteredProducts = await _context.Products.ToListAsync();
+            }
+
             return Ok(filteredProducts);
         }
         
