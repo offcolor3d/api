@@ -1,4 +1,5 @@
 using api.Data;
+using api.DTOs;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +63,36 @@ namespace api.Controllers
                 return NotFound();
             }
             return Ok(product);
+        }
+
+        // GET: api/products/priceof
+        [HttpPost("priceof")]
+        public async Task<ActionResult<decimal>> GetPriceOf([FromBody] ProductListDTO productList)
+        {
+            //Si la lista es nula o esta vacia se manda 0.
+            if (productList?.Products == null || !productList.Products.Any())
+                return Ok(0);
+
+            //Extrae todos los ID del DTO.
+            var productIds = productList.Products.Select(p => p.Id).ToList();
+
+            //Recoge todos los productos de la base de datos que coincidan con esos IDs.
+            var products = await _context.Products
+                .Where(p => productIds.Contains(p.Id))
+                .ToListAsync();
+
+            //Calcula el precio total multiplicando por la cantidad.
+            decimal total = 0;
+            foreach (var item in productList.Products)
+            {
+                var dbProduct = products.FirstOrDefault(p => p.Id == item.Id);
+                if (dbProduct != null)
+                {
+                    total += dbProduct.Price * item.Quantity;
+                }
+            }
+
+            return Ok(total);
         }
     }
 }
