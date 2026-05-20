@@ -1,4 +1,5 @@
 using api.Data;
+using api.Services;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +25,9 @@ builder.Services.AddCors(options =>
 // Configure database connection string.
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
+builder.Services.AddScoped<IProductService, ProductService>();
+
+//Agrega el contexto de la base de datos.
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(databaseUrl));
 
 // Add services to the container.
