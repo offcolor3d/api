@@ -14,7 +14,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
             "http://localhost:4321",
-            "https://offcolors.github.io"
+            "https://offcolors3d.github.io"
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
