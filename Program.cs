@@ -11,7 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 //CORS para proteccion.
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("FrontendPolicy", policy =>
+    //Politica una vez desplegada la api.
+    options.AddPolicy("ProductionPolicy", policy =>
     {
         policy.WithOrigins(
             "http://localhost:4321",
@@ -19,6 +20,14 @@ builder.Services.AddCors(options =>
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
+    });
+
+    //Politica para desarrollo.
+    options.AddPolicy("DevelopmentPolicy", policy =>
+    {
+       policy.AllowAnyOrigin()
+       .AllowAnyHeader()
+       .AllowAnyMethod();
     });
 });
 
@@ -45,9 +54,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("DevelopmentPolicy")
+}
+else
+{   
+    app.UseCors("ProductionPolicy");
 }
 
-app.UseCors("FrontendPolicy");
 
 app.UseHttpsRedirection();
 
